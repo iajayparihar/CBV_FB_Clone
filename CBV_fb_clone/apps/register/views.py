@@ -24,7 +24,7 @@ class user_login(generic.View):
             password = fm.cleaned_data.get('password')
             if user := authenticate(username = username, password = password):
                 login(request,user)
-                return render(request,'register/dashboard.html',{'message':'wel-come to dashboard'})
+                return redirect('Post:dashboard')
         else:
             fm = AuthenticationForm(request.POST)
         return render(request,'register/login.html',{'form':fm,'message':'try again!!!'})

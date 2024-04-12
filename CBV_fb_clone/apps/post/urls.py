@@ -3,8 +3,8 @@ from django.urls import path
 from .views import *
 app_name = "Post"
 urlpatterns = [
-    path('post/', PostFormView, name= 'post'),
-    path('dashbord/', dashbord, name= 'dashbord'),
+    path('post/', PostFormView.as_view(), name= 'post'),
+    path('dashboard/', dashboard.as_view(), name= 'dashboard'),
     path('all_user_post/', all_user_post, name= 'all_user_post'),
     path('view_post/', view_post, name= 'view_post'),
     path('update_post/<int:id>/', update_post, name= 'update_post'),

@@ -5,25 +5,46 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Count
 from register.models import CustomUser
+from django.views import generic
+# @login_required
+# def PostFormView(request):
+#     if request.method == 'POST':
+#         fm = UserPostForm(request.POST, request.FILES)
+#         if fm.is_valid():
+#             user_post = fm.save(commit=False)
+#             user_post.user = request.user            
+#             user_post.save()
+#             return redirect('Post:dashboard')  # Redirect to dashboard upon successful post creation
+    
+#         fm = UserPostForm()
+#     return render(request, 'post/post.html', {'form': fm})
 
-@login_required
-def PostFormView(request):
-    if request.method == 'POST':
-        fm = UserPostForm(request.POST, request.FILES)
-        if fm.is_valid():
-            user_post = fm.save(commit=False)
+class PostFormView(generic.CreateView):
+    form_class = UserPostForm
+    template_name = 'post/post.html'
+    
+    def get(self,request):
+        form = self.form_class
+        return render(request, self.template_name, {'form': form})
+    
+    def post(self,request):
+        form = UserPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            user_post = form.save(commit=False)
             user_post.user = request.user            
             user_post.save()
-            return redirect('Post:dashbord')  # Redirect to dashboard upon successful post creation
-        else:
-            fm = UserPostForm()
-    return render(request, 'post/post.html', {'form': fm})
+            return redirect('Post:dashboard')  # Redirect to dashboard upon successful post creation
 
-@login_required
-def dashbord(request):
-    if request.user.is_authenticated:
-        return render(request, 'post/dashbord.html',{'name':request.user})
-    return redirect('/')
+class dashboard(generic.View):
+    template_name = 'post/dashboard.html'
+    def get(self,request):
+        return render(request, self.template_name)
+    
+# @login_required
+# def dashboard(request):
+#     if request.user.is_authenticated:
+#         return render(request, 'post/dashboard.html')
+#     return redirect('/')
 
 
 @login_required
@@ -35,7 +56,7 @@ def update_post(request,id):
         fm = UserPostForm(request.POST, request.FILES, instance=new_obj1)
         if fm.is_valid():
             fm.save()
-        return redirect('Post:dashbord')  # Redirect to dashboard upon successful post creation
+        return redirect('Post:dashboard')  # Redirect to dashboard upon successful post creation
     else:
         fm = UserPostForm()
     return render(request, 'post/post.html', {'form': fm})
