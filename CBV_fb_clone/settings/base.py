@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-)ehk(bivd2+1hpripcnqf*5i9j^&#!0fz=fz%o)49cf+y_$yt6
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+AUTH_USER_MODEL = 'register.CustomUser'
 ALLOWED_HOSTS = []
 
 
@@ -115,10 +115,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
 STATICFILES_DIRS = [
     BASE_DIR / "static",
     "CBV_fb_clone/static/",
 ]
+
 STATIC_ROOT = "/CBV_fb_clone/CBV_fb_clone/static/"
 
 # Default primary key field type
