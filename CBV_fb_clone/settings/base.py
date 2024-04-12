@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     
     #own
     'register',
+    'post',
 ]
 
 MIDDLEWARE = [

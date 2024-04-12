@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Dashbord
+{% endblock %}
+
+{% block body %}
+  <div style="text-align: center;">
+    <h1>Dashbord {{ request.user.first_name|capfirst }} {{ request.user.last_name|capfirst }}</h1>
+    <h3>
+      <a href="{% url 'Post:post' %}">Create Post</a> <br /><br />
+      <a href="{% url 'Post:view_post' %}">Profile</a> <br /> <br />
+      <a href="{% url 'Post:all_user_post' %}">ALL post's</a><br /><br />
+    </h3>
+    <h3><a href="{% url 'logout_user' %}">Logout</a></h3>
+  </div>
+{% endblock %}
