@@ -8,7 +8,7 @@ urlpatterns = [
     path('all_user_post/', all_user_post.as_view(), name= 'all_user_post'),
     path('view_post/', view_post.as_view(), name= 'view_post'),
     path('update_post/<int:id>/', update_post, name= 'update_post'),
-    path('delete_post/<int:id>/', delete_post, name= 'delete_post'),
+    path('delete_post/<int:id>/', delete_post.as_view(), name= 'delete_post'),
     
     path('post_detail/<int:post_id>/', post_detail.as_view(), name= 'post_detail'),
     

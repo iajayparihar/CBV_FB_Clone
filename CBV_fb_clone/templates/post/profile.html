@@ -107,9 +107,10 @@
 
                 
                 <label for="caption">Caption: {{post.cap}}</label> <br>
-                <a href="{% url 'Post:update_post' post.id %}">update</a>
-                <a href="{% url 'Post:delete_post' post.id %}">delete</a>
-                <button onclick="openModal('{{ post.id }}')" class="myBtn">Comment</button>
+                <label for="caption">Description: {{post.desc}}</label> <br>
+                <a href="{% url 'Post:update_post' post.id %}" class="btn btn-warning">update</a>
+                <a href="{% url 'Post:delete_post' post.id %}" class="btn btn-danger">delete</a>
+                <button onclick="openModal('{{ post.id }}')" class="myBtn btn btn-success" >Comment</button>
             
         </div>
         
@@ -120,7 +121,11 @@
             <div style="border: 2px dashed black; text-align: center; height: auto;">
                 {% for cmt in comment %}
                 {% if post.id == cmt.post.id %}
-                @{{cmt.user.username}}:    {{cmt.comment}} <br>
+                @{{cmt.user.username}}:    {{cmt.comment}}
+                <span id="commentId{{cmt.post.id}}" value='{{cmt.id}}' style="display: none;" > {{cmt.id}} </span>
+                <button type="button" onclick="updateOpenModal('{{ post.id }}')" class="btn btn-warning">Update</button>
+                <button type="button" onclick="deleteCmt('{{cmt.id}}')" class="btn btn-danger">Delete</button>
+                <hr>
                 {% endif %}
                 {% endfor %}
             </div>
@@ -129,7 +134,28 @@
         
     </div>
     {% endfor %}
+
     
+    {% for post in user_post %}
+        
+    
+    <!-- update Modal -->
+    <div id="updateMyModal{{ post.id }}" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <!-- Model -->
+            <span onclick="updateCloseModal('{{ post.id }}')" class="close">&times;</span>
+            <h1>Comment</h1>
+            <form id="commentForm{{ post.id }}">
+                {% csrf_token %}
+                <textarea name="comment" id="updateComment{{ post.id }}" cols="50" rows="5"></textarea>
+                <button type="button" onclick="updateComment('{{ post.id }}')">update (ajax)</button>
+                
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
     <!-- Model Box start -->
     {% for post in user_post %}
     <!-- The Modal -->
@@ -153,7 +179,131 @@
     {% endif %}
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{% static 'post/comment.js' %}"></script>
-<script src="{% static 'post/like.js' %}"></script>
+<script>
+    //----------update-comment------------------------
 
+    function updateOpenModal(id) {
+        let modal = document.getElementById("updateMyModal" + id);
+        modal.style.display = "block";
+    }
+    
+    function updateCloseModal(id) {
+        let modal = document.getElementById("updateMyModal" + id);
+        modal.style.display = "none";
+    }
+    
+    function updateComment(postId) {
+        let comment = $('#updateComment' + postId).val();
+        let commentId = $('#commentId' + postId).text();
+        $.ajax({
+            type: 'POST',
+            url: '/post/update_comment/',
+            data: {
+                "cmt_id": commentId,
+                'comment': comment,
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(response) {
+                console.log(response);
+                if (response.success) {
+                    closeModal(postId); // closing the comment modal
+                    location.reload(); // reload the page
+                } else {
+                    alert('Error adding comment: ' + response.message);
+                }
+            },
+        });
+    }
+    
+    function deleteCmt(cmt_id){
+        $.ajax({
+            type: 'GET',
+            url: '/post/delete_comment/',
+            data: {
+                "cmt_id": cmt_id,
+            },
+            success: function(response) {
+                if (response.success) {
+                    location.reload(); // reload the page
+                } else {
+                    alert('Error adding comment: ');
+                }
+            },
+        });
+        
+    }
+
+    //-----------comment------------------------
+    function openModal(id) {
+        let modal = document.getElementById("myModal" + id);
+        modal.style.display = "block";
+    }
+    
+    function closeModal(id) {
+        let modal = document.getElementById("myModal" + id);
+        modal.style.display = "none";
+    }
+    
+    function submitComment(post_id) {
+        let commentText = $('#comment' + post_id).val(); // post_id is string ==> `$('#comment1')`
+        $.ajax({
+            url: '/post/post/comment/'+ post_id +'/',
+            type: 'POST',
+            data: {
+                'comment': commentText,
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val() // CSRF token from form
+            },
+            success: function(response) {
+                console.log(response);
+                if (response.success) {
+                    closeModal(post_id); // closing the comment modal
+                    location.reload(); // reload the page
+                } else {
+                    alert('Error adding comment: ' + response.message);
+                }
+            },
+        });
+    }
+    
+
+//---------------like unlike fucntion------------------------------------------
+
+        // unlike function
+        function submitUnLike(post_id){
+            $.ajax({
+                url: '/post/post/unlike/'+ post_id +'/',
+                type: 'GET',
+                data: {
+                },
+                success : function(response){
+                    if (response.success){
+                        location.reload();
+                    }
+                } //success close
+            })//ajax close
+        }// submimtLike close
+        
+        
+        
+        //like function
+        function submitLike(post_id) {
+            $.ajax({
+                url: '/post/post/like/' + post_id + '/',
+                type: 'GET',
+                data: {
+                    
+                },
+                success: function(response) {
+                    if (response.success) {
+                        location.reload(); // Reload the page if liking is successful
+                    } else {
+                        console.error('Like operation failed:', response.message); // Log error if liking fails
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX request failed:', status, error); // Log error if AJAX request fails
+                }
+            });
+        }
+</script>
 </html>

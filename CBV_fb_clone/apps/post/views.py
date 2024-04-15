@@ -22,7 +22,7 @@ class PostFormView(generic.CreateView):
             user_post = form.save(commit=False)
             user_post.user = request.user            
             user_post.save()
-            return redirect('Post:dashboard')  # Redirect to dashboard upon successful post creation
+            return redirect('Post:view_post')  # Redirect to dashboard upon successful post creation
 #--------------------------------------------------------------------------
 
 class dashboard(generic.View):
@@ -47,12 +47,11 @@ def update_post(request,id):
     return render(request, 'post/post.html', {'form': fm})
 
 
-@login_required
-def delete_post(request,id):
-    user_post = UserPost.objects.get(id = id)
-    user_post.delete()
-    user_post = UserPost.objects.filter(user=request.user)
-    return render(request, 'post/profile.html',{'user_post':user_post})
+class delete_post(generic.View):
+    def get(self,request,id):
+        user_post = UserPost.objects.get(id = id)
+        user_post.delete()
+        return redirect('/post/view_post/')
 
 #--------------------------------------------------------------------------
 class all_user_post(generic.View):
