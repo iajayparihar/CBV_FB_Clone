@@ -65,7 +65,7 @@
 
 
 <body>
-    <h2 style="text-align: right;margin-right: 15px;"><a href="{% url 'Post:dashbord' %}">home</a></h2>
+    <h2 style="text-align: right;margin-right: 15px;"><a href="{% url 'Post:dashboard' %}">home</a></h2>
     <h1>Profile</h1>
     {% if user_post|length >= 1 %}
         
@@ -112,15 +112,21 @@
                 <button onclick="openModal('{{ post.id }}')" class="myBtn">Comment</button>
             
         </div>
+        
+        {% if comment %}
+            
+        
         <div class="col-6">
             <div style="border: 2px dashed black; text-align: center; height: auto;">
-            {% for cmt in comment %}
-                    {% if post.id == cmt.post.id %}
-                    @{{cmt.user.username}}:    {{cmt.comment}} <br>
-                    {% endif %}
+                {% for cmt in comment %}
+                {% if post.id == cmt.post.id %}
+                @{{cmt.user.username}}:    {{cmt.comment}} <br>
+                {% endif %}
                 {% endfor %}
+            </div>
         </div>
-    </div>
+        {% endif %}
+        
     </div>
     {% endfor %}
     

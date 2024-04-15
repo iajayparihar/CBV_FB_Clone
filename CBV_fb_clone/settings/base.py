@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
     #own
     'register',
     'post',
@@ -115,14 +114,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = "/CBV_fb_clone/CBV_fb_clone/static/"
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
     "CBV_fb_clone/static/",
 ]
 
-STATIC_ROOT = "/CBV_fb_clone/CBV_fb_clone/static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
