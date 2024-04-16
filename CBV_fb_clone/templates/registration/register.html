@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
     
     {% block title %}
-    login
+    registration
     {% endblock title %}
 
 {% block body %}
 
-<form action="" method="post">
+<form action="" method="post" novalidate>
     {% csrf_token %}
     <h1>{{message}}</h1>
 
@@ -15,11 +15,11 @@
         <div class="row form-control  ">
             <div class="col mt-3" >
                 {% for fm in form %}
-                {{ fm.label_tag}} {{fm}} {{ fm.errors|striptags }}
+                {{ fm.label_tag}} {{fm}} <span style="color: red;">{{ fm.errors|striptags }}</span> 
                 <hr>
                 {% endfor %}
                 <input type="submit" value="Submit" class="btn btn-success">
-                <a href="{% url 'Register:register' %}" class="btn btn-primary">Register</a>
+                <a href="{% url 'login' %}" class="btn btn-warning">login</a>
             </div>
         </div>
     </div>
@@ -31,3 +31,5 @@
 
 {% endblock script %}
 
+
+<!-- {{form.username.label_tag}}{{form.username}} {{form.username.errors|striptags}} -->

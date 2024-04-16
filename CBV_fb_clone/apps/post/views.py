@@ -8,7 +8,7 @@ from register.models import CustomUser
 from django.views import generic
 #--------------------------------------------------------------------------
 
-class PostFormView(generic.CreateView):
+class PostFormView(generic.View):
     form_class = UserPostForm
     template_name = 'post/post.html'
     
@@ -25,16 +25,17 @@ class PostFormView(generic.CreateView):
             return redirect('Post:view_post')  # Redirect to dashboard upon successful post creation
 #--------------------------------------------------------------------------
 
-class dashboard(generic.View):
+class dashboard(generic.TemplateView):
     template_name = 'post/dashboard.html'
-    def get(self,request):
-        return render(request, self.template_name)
-    
-#--------------------------------------------------------------------------
 
-@login_required
-def update_post(request,id):
-    if request.method == 'POST':
+#--------------------------------------------------------------------------
+class update_post(generic.View):
+    def get(self,request,id):
+        fm = UserPostForm()
+        return render(request, 'post/post.html', {'form': fm})
+
+    def post(self,request,id):
+        # new_obj1 = get_object_or_404(UserPost,id = pk)
         new_obj1 = UserPost.objects.get(id = id)
         new_obj1.image = request.POST.get('image')
         
@@ -42,11 +43,9 @@ def update_post(request,id):
         if fm.is_valid():
             fm.save()
         return redirect('Post:dashboard')  # Redirect to dashboard upon successful post creation
-    else:
-        fm = UserPostForm()
-    return render(request, 'post/post.html', {'form': fm})
+    
 
-
+#--------------------------------------------------------------------------
 class delete_post(generic.View):
     def get(self,request,id):
         user_post = UserPost.objects.get(id = id)
@@ -59,9 +58,7 @@ class all_user_post(generic.View):
         all_post = UserPost.objects.all().order_by('-created_at')
         for post in all_post:
             post.is_liked = Like.objects.filter(user=request.user,post=post).exists()
-            
         all_cmt = UserComments.objects.all().order_by('-created_at')
-        
         return render(request,'post/all_user_post.html',{'all_user_post':all_post,'comment':all_cmt})
         
 
@@ -73,7 +70,6 @@ class view_post(generic.View):
         for post in user_post:
             post.is_liked = Like.objects.filter(user=request.user,post=post).exists()
         return render(request, 'post/profile.html',{'user_post':user_post,'comment':all_cmt})
-
 
 
 #--------------------------------------------------------------------------
@@ -89,7 +85,6 @@ class comment_on_post(generic.View):
         comment_text = self.request.POST.get('comment')
         if not comment_text:
             return JsonResponse({'success': False, 'message': 'Please add comment...'})
-        
         post = UserPost.objects.get(id=post_id)
         new_comment = UserComments.objects.create(user=request.user, post=post, comment=comment_text)
         new_comment.save()

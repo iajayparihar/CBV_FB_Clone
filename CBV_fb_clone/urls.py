@@ -22,8 +22,9 @@ from CBV_fb_clone.apps import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('register.urls')) ,
     path('post/',include('post.urls')),
+    path('accounts/',include('django.contrib.auth.urls')),
+    path('accounts/',include('register.urls')),
 ] 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -15,16 +15,18 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'Post:dashboard' %}">Home</a>
-            <h1 class="navbar-text">Explor</h1>
+            <h1 class="navbar-text">Explore</h1>
         </div>
     </nav>
-
+    
     <div class="container mt-4 w-50">
         {% for post in all_user_post %}
-        <div class="card mb-4">
+        <a href="{% url 'Post:post_detail' post.id %}" style="text-decoration: none;">
+            <div class="card mb-4">
             <div class="card-body">
                 <h2 class="card-title">{{ post.user.first_name }} {{ post.user.last_name }}</h2>
                 <img class="card-img-top" src="/media/{{ post.image }}" alt="Post Image">
+        </a>
                 <div class="card-text mt-2 mb-3">{{ post.cap }}</div>
                 <div class="card-text mb-3">{{ post.desc }}</div>
                 <div class="d-flex justify-content-between align-items-center">
@@ -50,20 +52,20 @@
                         </label>
                     </div>
                     {% if request.user.id == post.user.id %}
-                        <div>
-                            <a href="{% url 'Post:update_post' post.id %}" class="btn btn-warning">Update</a>
-                            <a href="{% url 'Post:delete_post' post.id %}" class="btn btn-danger">Delete</a>
-                        </div>
+                    <div>
+                        <a href="{% url 'Post:update_post' post.id %}" class="btn btn-warning">Update</a>
+                        <a href="{% url 'Post:delete_post' post.id %}" class="btn btn-danger">Delete</a>
+                    </div>
                     {% endif %}
                 </div>
                 <hr>
                 <div class="comment">
                     {% for cmt in comment %}
-                        {% if post.id == cmt.post.id %}
-                            <p><strong>@{{ cmt.user.username }}:</strong> {{ cmt.comment }}</p>
+                    {% if post.id == cmt.post.id %}
+                    <p><strong>@{{ cmt.user.username }}:</strong> {{ cmt.comment }}</p>
                             {% if request.user.username == cmt.user.username %}
-                                <span id="commentId{{ cmt.post.id }}" style="display: none;">{{ cmt.id }}</span>
-                                <button type="button" class="btn btn-warning" onclick="updateOpenModal('{{ post.id }}')">Update</button>
+                                <span id="commentId{{ cmt.id }}" style="display:none ;">{{ cmt.id }}</span>
+                                <button type="button" class="btn btn-warning" onclick="updateOpenModal('{{ cmt.id }}')">Update</button>
                                 <button type="button" class="btn btn-danger" onclick="deleteCmt('{{ cmt.id }}')">Delete</button>
                             {% endif %}
                             <hr>
@@ -73,32 +75,36 @@
                 <button onclick="openModal('{{ post.id }}')" class="myBtn btn btn-success">Comment</button>
             </div>
         </div>
+    
         {% endfor %}
     </div>
 
+    
+    {% for cmt in comment %}
     <!-- Update and submit Modals -->
-    {% for post in all_user_post %}
     <!-- Update Modal -->
-    <div id="updateMyModal{{ post.id }}" class="modal">
+    <div id="updateMyModal{{ cmt.id }}" class="modal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Update Comment</h5>
-                    <button type="button" onclick="updateCloseModal('{{ post.id }}')" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" onclick="updateCloseModal('{{ cmt.id }}')" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="commentForm{{ post.id }}">
+                    <form id="commentForm{{ cmt.id }}">
                         {% csrf_token %}
-                        <textarea name="comment" id="updateComment{{ post.id }}" class="form-control" rows="5"></textarea>
+                        <textarea name="comment" id="updateComment{{ cmt.id }}" class="form-control" rows="5"></textarea>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="updateComment('{{ post.id }}')">Update</button>
+                    <button type="button" class="btn btn-primary" onclick="updateComment('{{ cmt.id }}')">Update</button>
                 </div>
             </div>
         </div>
     </div>
-
+    {% endfor %}
+    
+    {% for post in all_user_post %}
     <!-- Submit Modal -->
     <div id="myModal{{ post.id }}" class="modal">
         <div class="modal-dialog modal-dialog-centered">
@@ -126,19 +132,19 @@
 <script>
     //----------update-comment------------------------
 
-    function updateOpenModal(id) {
-        let modal = document.getElementById("updateMyModal" + id);
+    function updateOpenModal(cid) {
+        let modal = document.getElementById("updateMyModal" + cid);
         modal.style.display = "block";
     }
     
-    function updateCloseModal(id) {
-        let modal = document.getElementById("updateMyModal" + id);
+    function updateCloseModal(cid) {
+        let modal = document.getElementById("updateMyModal" + cid);
         modal.style.display = "none";
     }
     
-    function updateComment(postId) {
-        let comment = $('#updateComment' + postId).val();
-        let commentId = $('#commentId' + postId).text();
+    function updateComment(cid) {
+        let comment = $('#updateComment' + cid).val();
+        let commentId = $('#commentId' + cid).text();
         $.ajax({
             type: 'POST',
             url: '/post/update_comment/',
@@ -148,9 +154,8 @@
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
             },
             success: function(response) {
-                console.log(response);
                 if (response.success) {
-                    closeModal(postId); // closing the comment modal
+                    updateCloseModal(cid); // closing the comment modal
                     location.reload(); // reload the page
                 } else {
                     alert('Error adding comment: ' + response.message);
