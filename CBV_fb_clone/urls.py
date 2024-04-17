@@ -19,10 +19,10 @@ from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 from CBV_fb_clone.apps import *
-
+import django.contrib.auth.urls
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('post/',include('post.urls')),
+    path('post/',include('post.urls')),     
     path('accounts/',include('django.contrib.auth.urls')),
     path('accounts/',include('register.urls')),
 ] 

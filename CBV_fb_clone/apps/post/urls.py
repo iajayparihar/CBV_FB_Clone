@@ -4,7 +4,6 @@ from .views import *
 app_name = "Post"
 urlpatterns = [
     path('post/', PostFormView.as_view(), name= 'post'),
-    path('dashboard/', dashboard.as_view(), name= 'dashboard'),
     path('all_user_post/', all_user_post.as_view(), name= 'all_user_post'),
     path('view_post/', view_post.as_view(), name= 'view_post'),
     path('update_post/<int:id>/', update_post.as_view(), name= 'update_post'),
@@ -17,5 +16,4 @@ urlpatterns = [
     path('delete_comment/', delete_comment.as_view(), name='delete_comment'),
     
     path('post/like/<int:pk>/', like.as_view() , name= 'like'),
-    path('post/unlike/<int:pk>/', unlike.as_view() , name= 'unlike'),
 ]

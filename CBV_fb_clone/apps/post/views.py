@@ -23,10 +23,6 @@ class PostFormView(generic.View):
             user_post.user = request.user            
             user_post.save()
             return redirect('Post:view_post')  # Redirect to dashboard upon successful post creation
-#--------------------------------------------------------------------------
-
-class dashboard(generic.TemplateView):
-    template_name = 'post/dashboard.html'
 
 #--------------------------------------------------------------------------
 class update_post(generic.View):
@@ -108,27 +104,24 @@ class delete_comment(generic.View):
         UserComments.objects.get(id=cmt_id).delete()
         return JsonResponse({'success': True})
     
+
 class like(generic.View):
-    def get(self,request,pk,*args, **kwargs):
+    def get(self,request,pk):
         user = request.user
-        post = UserPost.objects.get(id = pk)
-
-        liked = Like.objects.filter(user=user,post=post).count()
-        if not liked :
-            like = Like.objects.create(user=user,post=post)
-            like.save()
-            post.like = post.like + 1
-            post.save()
-            return JsonResponse({'success': True})
-
-class unlike(generic.View):
-    def get(self,request,pk,*args, **kwargs):
-        user = request.user
-        post = UserPost.objects.get(id = pk)
+        post = get_object_or_404(UserPost,id=pk)
+        #checking post is liked or not by cur user
         like = Like.objects.filter(user=user,post=post)
     
         if liked:= like.count():
             post.like = post.like - 1
             post.save()
             like.delete()
+        else:
+            like = Like.objects.create(user=user,post=post)
+            like.save()
+            post.like = post.like + 1
+            post.save()
+        
         return JsonResponse({'success': True})
+            
+        
