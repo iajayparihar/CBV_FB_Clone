@@ -8,75 +8,92 @@ from register.models import CustomUser
 from django.views import generic
 #--------------------------------------------------------------------------
 
-class PostFormView(generic.View):
+class PostFormView(generic.FormView):
     form_class = UserPostForm
     template_name = 'post/post.html'
-    
-    def get(self,request):
-        form = self.form_class
-        return render(request, self.template_name, {'form': form})
-    
-    def post(self,request):
-        form = UserPostForm(request.POST, request.FILES)
-        if form.is_valid():
-            user_post = form.save(commit=False)
-            user_post.user = request.user            
-            user_post.save()
-            return redirect('Post:view_post')  # Redirect to dashboard upon successful post creation
+    success_url = '/post/view_post/'
+
+    # when request.POST then    
+    def form_valid(self,form):
+        user_post = form.save(commit=False)
+        user_post.user = self.request.user            
+        user_post.save()
+        return super().form_valid(form)
 
 #--------------------------------------------------------------------------
-class update_post(generic.View):
-    def get(self,request,id):
-        fm = UserPostForm()
-        return render(request, 'post/post.html', {'form': fm})
-
-    def post(self,request,id):
-        # new_obj1 = get_object_or_404(UserPost,id = pk)
-        new_obj1 = UserPost.objects.get(id = id)
-        new_obj1.image = request.POST.get('image')
+class update_post(generic.UpdateView):
+    model = UserPost
+    form_class = UserPostForm
+    template_name = 'post/post.html'
+    success_url = '/post/view_post/'
+    
+#--------------------------------------------------------------------------
+class delete_post(generic.DeleteView):
+    model = UserPost
+    success_url = '/post/view_post/'
+    template_name = 'post/conf_delete.html'
+    
+#--------------------------------------------------------------------------
+class all_user_post(generic.ListView):
+    model = UserPost
+    template_name = 'post/all_user_post.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         
-        fm = UserPostForm(request.POST, request.FILES, instance=new_obj1)
-        if fm.is_valid():
-            fm.save()
-        return redirect('Post:dashboard')  # Redirect to dashboard upon successful post creation
-    
-
-#--------------------------------------------------------------------------
-class delete_post(generic.View):
-    def get(self,request,id):
-        user_post = UserPost.objects.get(id = id)
-        user_post.delete()
-        return redirect('/post/view_post/')
-
-#--------------------------------------------------------------------------
-class all_user_post(generic.View):
-    def get(self,request):
         all_post = UserPost.objects.all().order_by('-created_at')
         for post in all_post:
-            post.is_liked = Like.objects.filter(user=request.user,post=post).exists()
+            post.is_liked = Like.objects.filter(user=self.request.user,post=post).exists()
         all_cmt = UserComments.objects.all().order_by('-created_at')
-        return render(request,'post/all_user_post.html',{'all_user_post':all_post,'comment':all_cmt})
         
-
+        # ** always use this type of context pass 
+        context['all_user_post'] = all_post
+        context['comment'] = all_cmt
+    
+        return context
+        
 #--------------------------------------------------------------------------
-class view_post(generic.View):
-    def get(self,request):
-        user_post = UserPost.objects.filter(user=request.user).order_by('-created_at')
+class view_post(generic.ListView):
+    model = UserPost
+    template_name = 'post/profile.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user_post = UserPost.objects.filter(user=self.request.user).order_by('-created_at')
         all_cmt = UserComments.objects.all().order_by('-created_at')
         for post in user_post:
-            post.is_liked = Like.objects.filter(user=request.user,post=post).exists()
-        return render(request, 'post/profile.html',{'user_post':user_post,'comment':all_cmt})
+            post.is_liked = Like.objects.filter(user=self.request.user,post=post).exists()
 
+        context['user_post']=user_post
+        context['comment']=all_cmt
+
+        return context
 
 #--------------------------------------------------------------------------
-class post_detail(generic.View):
-    def get(self,request,post_id,*args, **kwargs):
-        user_post = UserPost.objects.get(id = post_id)
+class post_detail(generic.DetailView):
+    model = UserPost
+    template_name = 'post/post_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # ** in this kwargs, single user query is present 
+        user_post = kwargs['object']
         all_cmt = UserComments.objects.all().order_by('-created_at')
-        user_post.is_liked = Like.objects.filter(user=request.user,post=user_post).exists()
-        return render(request,'post/post_detail.html',{'post':user_post,'comment':all_cmt})
+        user_post.is_liked = Like.objects.filter(user=self.request.user,post=kwargs['object']).exists()
+    
+        context['post'] = user_post
+        context['comment'] = all_cmt
+
+        return context
+    
 #--------------------------------------------------------------------------
-class comment_on_post(generic.View):
+
+class comment_on_post(generic.FormView):
+    form_class = UserCommentForm    
+    def form_valid(self,form):
+        return super().form_valid(form)
+    
     def post(self,request,post_id,*args, **kwargs):
         comment_text = self.request.POST.get('comment')
         if not comment_text:
