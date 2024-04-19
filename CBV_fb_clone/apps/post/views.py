@@ -94,12 +94,12 @@ class comment_on_post(generic.FormView):
     def form_valid(self,form):
         return super().form_valid(form)
     
-    def post(self,request,post_id,*args, **kwargs):
+    def post(self,request,pk,*args, **kwargs):
         comment_text = self.request.POST.get('comment')
         if not comment_text:
             return JsonResponse({'success': False, 'message': 'Please add comment...'})
-        post = UserPost.objects.get(id=post_id)
-        new_comment = UserComments.objects.create(user=request.user, post=post, comment=comment_text)
+        post = UserPost.objects.get(id=pk)
+        new_comment = UserComments.objects.create(user=self.request.user, post=post, comment=comment_text)
         new_comment.save()
         return JsonResponse({'success': True})
         
@@ -140,5 +140,3 @@ class like(generic.View):
             post.save()
         
         return JsonResponse({'success': True})
-            
-        
