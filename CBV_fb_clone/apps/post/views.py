@@ -1,13 +1,56 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from django.views import generic
 from .forms import UserPostForm, UserCommentForm
 from .models import *
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.db.models import Count
-from register.models import CustomUser
-from django.views import generic
+from django.conf import settings
 #--------------------------------------------------------------------------
+import requests, os
 
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from email.mime.image import MIMEImage
+##########################################################################
+
+Email_Api_Key = "AIzaSyDi5Ta4oJtbiBeycRVdGeRcLrxLQhh7atE"
+#sending mail
+# Abstract Api
+def validate_email(email):
+    response = requests.get("https://emailvalidation.abstractapi.com/v1/?api_key=371b6bc2168b46838526cbf0eae84649&email=luhulu329@gmail.com")
+    data = response.json()
+    valueText = data.get('is_valid_format')
+    # is_valid_format and is_mx_found and is_smtp_valid and not is_catchall_email and not is_role_email and not is_free_email
+    return valueText.get('value')
+
+def send_email(subject, from_email, to_email, reply_to, headers, attechments):
+    if validate_email(to_email) and validate_email(reply_to):
+        html_message = render_to_string('post/email.html')
+        plain_message = strip_tags(html_message)
+        email = EmailMultiAlternatives(
+            subject= subject,
+            body = plain_message,
+            from_email= from_email,
+            to=[to_email],
+            reply_to= [reply_to],
+            headers= headers,
+        )
+        email.attach_alternative(html_message, "text/html")
+        
+        img_path = f'{settings.BASE_DIR}/media/user_post/{str(attechments)}'
+        
+        with open(img_path, 'rb') as file:
+            image_data = file.read()
+            banner_image = MIMEImage(image_data)
+            banner_image.add_header('Content-ID', '<image>')
+            email.attach(banner_image)
+            email.send()
+            
+        print('Your emil is sent successfully')
+    else:
+        print("Invalid recipient email address.")
+
+##########################################################################
 class PostFormView(generic.FormView):
     form_class = UserPostForm
     template_name = 'post/post.html'
@@ -18,6 +61,17 @@ class PostFormView(generic.FormView):
         user_post = form.save(commit=False)
         user_post.user = self.request.user            
         user_post.save()
+#--------------Email-----------------------------------------------------------------
+        subject = "Post Saved"
+        headers = {"My-Header": "hello i am header"}
+        from_email = settings.EMAIL_HOST_USER
+        to_email = "ajayparihar876@gmail.com"
+        attachments = form.cleaned_data['image']        
+        reply_to = 'ajayparihar876@gmail.com'
+        
+        send_email(subject=subject,from_email= from_email,to_email= to_email,headers=headers,reply_to=reply_to,attechments=attachments)
+#-------------------------------------------------------------------------------
+    
         return super().form_valid(form)
 
 #--------------------------------------------------------------------------
