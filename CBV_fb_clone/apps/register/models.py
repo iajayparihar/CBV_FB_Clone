@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-
 gen = (("Female", 'Female'),
         ("Male", 'Male'),
         ('Trans','Trans'),
@@ -14,5 +13,3 @@ class CustomUser(AbstractUser):
     
     def __str__(self):
         return self.username
-
-    

@@ -13,6 +13,9 @@ class UserPost(models.Model):
     def __str__(self):
         return f"{self.user.first_name}, {self.cap}"
     
+    class Meta:
+        ordering = ['-created_at']
+    
 class Like(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     post = models.ForeignKey(UserPost, on_delete=models.CASCADE, related_name='post_like')
@@ -22,7 +25,7 @@ class Like(models.Model):
 
 class UserComments(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    post = models.ForeignKey(UserPost, on_delete=models.CASCADE, related_name='post_comment')
+    post = models.ForeignKey(UserPost, on_delete=models.CASCADE, related_name='post')
     comment = models.TextField(blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
