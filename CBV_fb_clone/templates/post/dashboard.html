@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Dashboard
+{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      padding-top: 20px;
+      background-image: url("{% static 'path/to/your/image.jpg' %}");
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+    }
+    .center-text {
+      text-align: center;
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <div class="center-text">
+      <h1 class="display-4">Dashboard {{ request.user.first_name|capfirst }} {{ request.user.last_name|capfirst }}</h1>
+      <div class="mt-4">
+        <a class="btn btn-primary btn-lg" href="{% url 'Post:post' %}">Create Post</a>
+      </div>
+      <div class="mt-4">
+        <a class="btn btn-secondary" href="{% url 'Post:view_post' %}">Profile</a>
+      </div>
+      <div class="mt-4">
+        <a class="btn btn-info" href="{% url 'Post:all_user_post' %}">All Posts</a>
+      </div>
+      <div class="mt-4">
+        <a class="btn btn-danger" href="{% url 'logout' %}">Logout</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}
