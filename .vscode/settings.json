@@ -1,0 +1,12 @@
+{
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./CBV_fb_clone",
+        "-p",
+        "*test.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true,
+    "git.ignoreLimitWarning": true
+}
