@@ -3,7 +3,7 @@ from .base import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'CBV_FB_Clone',      
+        'NAME': 'CBV_FOR_PYTEST',      
         'USER': 'postgres',
         'PASSWORD': '12345', 
         # 'HOST': 'db',
