@@ -41,8 +41,6 @@ class ViewPostTestCase(TestCase):
         self.url = reverse('Post:post')  
         self.user = User.objects.create_user(username='testuser', password='testpassword')
 
-    def test_View_Post_TC(self):
-        import pdb;pdb.set_trace()
-        
+    def test_View_Post_TC(self):     
         response = self.client.get(self.url)
         self.assertEqual(response.status_code,status.HTTP_200_OK)
