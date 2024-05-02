@@ -159,3 +159,27 @@ def test_view_post_detail_non_existing_post(user):
     client.force_login(user)
     response = client.get(url)
     assert response.status_code == 404
+
+
+
+
+@pytest.mark.django_db
+def test_all_user_post_view(user):
+    # Create some sample user posts
+    user_post1 = UserPost.objects.create(user=user, image='test_image1.jpg', location='Test Location1', cap='Test Caption1', desc='Test Description1')
+    user_post2 = UserPost.objects.create(user=user, image='test_image2.jpg', location='Test Location2', cap='Test Caption2', desc='Test Description2')
+    
+    user_comment1 = UserComments.objects.create(user=user, post=user_post1, comment="first comment1")
+    user_comment2 = UserComments.objects.create(user=user, post=user_post2, comment="first comment2")
+
+    Like.objects.create(user=user, post=user_post1)
+    
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('Post:all_user_post'))
+    
+    assert response.status_code == 200
+    assert user_post1 in response.context_data['all_user_post']  
+    assert user_post2 in response.context_data['all_user_post']  
+    assert len(response.context_data['comment']) == 2
+    assert response.context_data['userpost_list'][0].like== 0   
