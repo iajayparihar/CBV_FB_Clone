@@ -7,8 +7,8 @@ class UserPost(models.Model):
     location = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     like = models.IntegerField(default=0)
-    cap = models.TextField(verbose_name='Caption', blank=True, null=True)
-    desc = models.TextField(verbose_name='Description', blank=True, null=True)
+    cap = models.TextField(verbose_name='Caption')
+    desc = models.TextField(verbose_name='Description')
     
     def __str__(self):
         return f"{self.user.first_name}, {self.cap}"
