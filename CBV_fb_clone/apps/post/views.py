@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.views import generic
 from .forms import UserPostForm, UserCommentForm
 from .models import *
@@ -160,8 +160,10 @@ class update_on_comment(generic.View):
         comment_text = self.request.POST.get('comment')
         if not comment_text:
             return JsonResponse({'success': False, 'message': 'Please add comment...'})
-        
-        cmt = UserComments.objects.get(id=self.request.POST.get('cmt_id'))
+        cmt_id = self.request.POST.get('cmt_id')
+        cmt = get_object_or_404(UserComments,id=cmt_id)
+        if not cmt:
+            return Http404
         cmt.comment = comment_text
         cmt.save()
         return JsonResponse({'success': True})
