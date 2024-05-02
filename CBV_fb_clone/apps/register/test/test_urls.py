@@ -1,12 +1,16 @@
-from django.test import SimpleTestCase
-from register.urls import *
+import pytest
+from django.urls import reverse, resolve
 from register.views import *
-from django.urls import reverse , resolve
-class RegisterUrlTestClass(SimpleTestCase):
-    def test_RegisterUrl(self):
-        url = reverse('Register:register')
-        self.assertEqual(resolve(url).func.view_class, register)
+from django.urls.exceptions import Resolver404
 
-    def test_ProfileUrl(self):
-        url = reverse("Register:profile")
-        self.assertEqual(resolve(url).func.view_class, profile)
+@pytest.mark.parametrize('url_name, expected_view', [
+    ('register', register),
+    ('profile', profile),
+])
+def test_urls(url_name, expected_view):
+    try:
+        url = reverse(f'Register:{url_name}')
+        found = resolve(url)
+        assert found.func.view_class == expected_view
+    except Resolver404:
+        pytest.fail(f"Failed to resolve URL: {url}")
