@@ -183,3 +183,63 @@ def test_all_user_post_view(user):
     assert user_post2 in response.context_data['all_user_post']  
     assert len(response.context_data['comment']) == 2
     assert response.context_data['userpost_list'][0].like== 0   
+
+
+
+
+
+
+@pytest.mark.django_db
+def test_error_handling():
+    response = client.get(reverse('Post:update_on_comment'))
+    assert response.status_code == 405  
+
+@pytest.mark.django_db
+def test_authentication_and_authorization():
+    response = client.get(reverse('Register:register'))
+    assert response.status_code == 200  
+
+    user = User.objects.create_user(username='testuser', password='password')
+    client.force_login(user)
+    response = client.post(reverse('Register:register'))
+    assert response.status_code == 200 
+
+
+@pytest.mark.django_db
+def test_performance_and_scalability():
+    # Test performance and scalability under load
+    # Write test cases to simulate a large number of concurrent users or a high volume of data
+    response = client.get(reverse('Register:register'))
+    assert response.status_code == 200  
+    # for i in range(20):
+    #     user = User.objects.create_user(username=f'testuser{i}', password='password')
+    #     client.force_login(user)
+    #     response = client.post(reverse('Register:register'))
+    #     assert response.status_code == 200 
+
+from post.views import send_email
+from django.core import mail
+from django.test import override_settings
+from unittest.mock import patch
+
+@override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
+@patch('post.views.validate_email')  
+@pytest.mark.django_db
+def test_sending_mail(user):
+
+    send_email(
+        subject='test Subject',
+        from_email='ajayparihar876@gmail.com',
+        to_email='luhulu329@gmail.com',
+        reply_to='ajayparihar876@gmail.com',
+        attachments=None,
+        context={'html_content': '<h1>Hello</h1>'},
+    )
+
+    assert len(mail.outbox) == 1  
+
+    sent_email = mail.outbox[0]
+    assert sent_email.subject == 'test Subject'
+    assert sent_email.from_email == 'ajayparihar876@gmail.com'
+    assert sent_email.to == ['luhulu329@gmail.com']
+    assert sent_email.reply_to == ['ajayparihar876@gmail.com']

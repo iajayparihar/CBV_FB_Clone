@@ -12,7 +12,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from email.mime.image import MIMEImage
 ##########################################################################
-
+from post.tasks import send_email_task
 
 Email_Api_Key = "AIzaSyDi5Ta4oJtbiBeycRVdGeRcLrxLQhh7atE"
 #sending mail
@@ -25,26 +25,40 @@ def validate_email(email):
     # is_valid_format and is_mx_found and is_smtp_valid and not is_catchall_email and not is_role_email and not is_free_email
     return valueText.get('value')
 
-def send_email(subject, from_email, to_email, reply_to, headers, attechments,context):
-    if validate_email(to_email) and validate_email(reply_to):
-        # context is pass for email in html_message
-        html_message = render_to_string('post/email.html',context=context)
-        plain_message = strip_tags(html_message)
-        email = EmailMultiAlternatives(subject= subject,body = plain_message,from_email= from_email,to=[to_email],reply_to= [reply_to],headers= headers,)
-        email.attach_alternative(html_message, "text/html")
-        
-        img_path = f'{settings.BASE_DIR}/media/user_post/{str(attechments)}'
-        
+def send_email(subject, from_email, to_email, reply_to, attachments=None, context=None):
+    # if validate_email(to_email) and validate_email(reply_to):
+    # Ensure context is a dictionary
+    if context is None:
+        context = {}
+
+    
+    # context is passed for email in html_message
+    html_message = render_to_string('post/email.html', context=context)
+    plain_message = strip_tags(html_message)
+    
+    email = EmailMultiAlternatives(
+        subject=subject,
+        body=plain_message,
+        from_email=from_email,
+        to=[to_email],
+        reply_to=[reply_to],
+
+    )
+    email.attach_alternative(html_message, "text/html")
+    if attachments is not None:
+        img_path = f'{settings.BASE_DIR}/media/user_post/{str(attachments)}'
         with open(img_path, 'rb') as file:
             image_data = file.read()
             banner_image = MIMEImage(image_data)
-            banner_image.add_header('Content-ID', '<image>')
+            # banner_image.add_header('Content-ID', '<image>')
             email.attach(banner_image)
-        
-        email.send()
-        print('Your emil is sent successfully')
-    else:
-        print("Invalid recipient email address.")
+    
+    email.send()
+    print('Your email has been sent successfully.')
+    # else:
+    #     print("Invalid recipient email address.")
+
+
 
 ##########################################################################
 class PostFormView(generic.FormView):
@@ -57,17 +71,22 @@ class PostFormView(generic.FormView):
         user_post = form.save(commit=False)
         user_post.user = self.request.user            
         user_post.save()
+    #---Celery--email----------
+        email_content = ''
+        recipient = ''
+        send_email_task.delay(email_content)
     #--------------Email-----------------------------------------------------------------
         subject = "Post Saved"
         headers = {"My-Header": "hello i am header"}
         from_email = settings.EMAIL_HOST_USER
+
         to_email = "ajayparihar876@gmail.com"
         attachments = form.cleaned_data['image']        
         reply_to = 'ajayparihar876@gmail.com'
         context = {
             'full_name': f"{self.request.user.first_name} {self.request.user.last_name}"
         }
-        # send_email(subject=subject,from_email= from_email,to_email= to_email,headers=headers,reply_to=reply_to,attechments=attachments,context=context)
+        # send_email(subject=subject,from_email= from_email,to_email= to_email,reply_to=reply_to,attachments=None,context=context)
     #------------------------------------------------------------------------------------
         return super().form_valid(form)
     

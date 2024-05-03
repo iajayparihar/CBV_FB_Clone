@@ -27,3 +27,4 @@ class UserCommentForm(forms.ModelForm):
     class Meta:
         model = UserComments
         fields = ['comment']
+

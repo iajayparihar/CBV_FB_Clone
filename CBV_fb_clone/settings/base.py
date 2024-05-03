@@ -158,6 +158,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'luhulu329@gmail.com'
 EMAIL_HOST_PASSWORD = 'zwyg vyrm vkcl hlni'
 EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = 'Celery <luhulu329@gmail.com>'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -209,3 +210,10 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
+
+# Celery settings
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SEIALIZER = 'json'
