@@ -11,7 +11,7 @@ from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from email.mime.image import MIMEImage
-##########################################################################
+
 from post.tasks import send_email_task
 
 Email_Api_Key = "AIzaSyDi5Ta4oJtbiBeycRVdGeRcLrxLQhh7atE"
@@ -60,7 +60,6 @@ def send_email(subject, from_email, to_email, reply_to, attachments=None, contex
 
 
 
-##########################################################################
 class PostFormView(generic.FormView):
     form_class = UserPostForm
     template_name = 'post/post.html'
@@ -72,9 +71,14 @@ class PostFormView(generic.FormView):
         user_post.user = self.request.user            
         user_post.save()
     #---Celery--email----------
-        email_content = ''
-        recipient = ''
-        send_email_task.delay(email_content)
+        context = {
+            'full_name': f"{self.request.user.first_name} {self.request.user.last_name}"
+        }
+        html_message = render_to_string('post/email.html', context=context)
+        plain_message = strip_tags(html_message)
+        # send_email_task.delay(plain_message,html_message)
+        task_id = "a1"
+        send_email_task.apply_async(kwargs={"plain_message": plain_message, "html_message": html_message})
     #--------------Email-----------------------------------------------------------------
         subject = "Post Saved"
         headers = {"My-Header": "hello i am header"}
@@ -83,12 +87,11 @@ class PostFormView(generic.FormView):
         to_email = "ajayparihar876@gmail.com"
         attachments = form.cleaned_data['image']        
         reply_to = 'ajayparihar876@gmail.com'
-        context = {
-            'full_name': f"{self.request.user.first_name} {self.request.user.last_name}"
-        }
+        
         # send_email(subject=subject,from_email= from_email,to_email= to_email,reply_to=reply_to,attachments=None,context=context)
     #------------------------------------------------------------------------------------
         return super().form_valid(form)
+    
     
 
 #-------------------------------------------------------------------------------------
@@ -112,7 +115,7 @@ class all_user_post(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        all_post = UserPost.objects.all().order_by('-created_at')
+        all_post = UserPost.objects.all().order_by('-created_at')    
         for post in all_post:
             post.is_liked = Like.objects.filter(user=self.request.user,post=post).exists()
         all_cmt = UserComments.objects.all().order_by('-created_at')
