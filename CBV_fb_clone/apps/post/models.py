@@ -32,3 +32,23 @@ class UserComments(models.Model):
     def __str__(self):
         return f"Logged in user: {self.user.first_name}, Comment:  {self.comment}"
 
+
+
+from django.dispatch import receiver 
+from django.db.models.signals import pre_save,post_save,pre_delete,post_delete
+import datetime
+
+@receiver(pre_save,sender = UserPost)
+def UserPost_pre_save(sender,instance,**kwargs):
+    current_time = datetime.datetime.now()
+    with open("logdata.txt", 'a') as file:
+        file.write(str(current_time) + '\t' + instance.user.username + ' ' + 'Post created: (pre_save function)'+"\n")
+    print('pre_save : post created!')
+
+@receiver(post_save,sender = UserPost)
+def UserPost_post_save(sender,instance,**kwargs):
+    current_time = datetime.datetime.now()
+    with open("logdata.txt", 'a') as file:
+        file.write(str(current_time) + '\t' + instance.user.username + ' ' + 'Post created: (post_save function)'+"\n")
+    print('post_save : post created!')
+
