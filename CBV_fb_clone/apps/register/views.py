@@ -6,6 +6,21 @@ from django.contrib.auth.decorators import login_required
 from django.views import generic
 from django.contrib.auth import views
 from django.conf import settings
+
+#------Custom single-----------------
+from django.dispatch import Signal, receiver
+
+# Define a custom signal
+hello_signal = Signal()
+
+@receiver(hello_signal)
+def my_signal(sender,instance, **kwargs):
+    message = kwargs.get("message")
+    print(f"Received signal from {instance.username}: {message}")
+
+hello_signal.send(sender=None,instance=CustomUser.objects.all().first() ,message="Hello, world!")
+#---------------------------------------------------------
+
 class register(generic.CreateView):
     form_class = CustomUserForm
     template_name = 'registration/register.html'
