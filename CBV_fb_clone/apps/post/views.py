@@ -6,12 +6,10 @@ from .models import *
 from django.conf import settings
 #--------------------------------------------------------------------------
 import requests, os
-
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from email.mime.image import MIMEImage
-
 from post.tasks import send_email_task
 
 Email_Api_Key = "AIzaSyDi5Ta4oJtbiBeycRVdGeRcLrxLQhh7atE"
@@ -60,6 +58,25 @@ def send_email(subject, from_email, to_email, reply_to, attachments=None, contex
 
 
 
+#------Custom single-----------------
+from django.dispatch import Signal, receiver
+import datetime
+
+hello_signal = Signal()
+
+@receiver(hello_signal)
+def my_signal(sender,instance, **kwargs):
+    message = kwargs.get("message")
+    import pdb;pdb.set_trace()
+    current_time = datetime.datetime.now()
+    with open("logdata.txt", "a") as file:
+        file.write(str(current_time) + "\t" + instance.user.username + " " + message + "\n")
+
+
+# hello_signal.send(sender=None,instance=UserPost.objects.all().first(), message="Custom Signal form Post view's : Hello, u r logged in")
+#---------------------------------------------------------
+
+
 class PostFormView(generic.FormView):
     form_class = UserPostForm
     template_name = 'post/post.html'
@@ -90,6 +107,9 @@ class PostFormView(generic.FormView):
         
         # send_email(subject=subject,from_email= from_email,to_email= to_email,reply_to=reply_to,attachments=None,context=context)
     #------------------------------------------------------------------------------------
+
+        hello_signal.send(sender=None,instance=UserPost.objects.all().first(), message="Custom Signal form Post view's : Post saved")
+
         return super().form_valid(form)
     
     
