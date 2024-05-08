@@ -1,21 +1,111 @@
-2024-05-07 07:03:58.601790	111 User created successfully
-2024-05-07 07:04:09.152654	111 User successfully login.
-2024-05-07 07:12:52.603558	111 User logout successfully.
-2024-05-07 13:04:44.893986	Login Faild
-2024-05-07 13:08:55.457785	 User logout successfully.
-2024-05-07 13:08:58.340007	User logout successfully.
-2024-05-07 13:08:58.413187	User logout successfully.
-2024-05-07 13:09:00.253145	User logout successfully.
-2024-05-07 13:09:00.324038	User logout successfully.
-2024-05-07 13:09:04.245476	User logout successfully.
-2024-05-07 13:09:04.312600	User logout successfully.
-2024-05-07 13:09:08.322336	User logout successfully.
-2024-05-07 13:09:51.053750	t successfully.
-2024-05-07 13:10:37.709613	Database connection successfully.
-2024-05-07 13:13:51.795624	Database connection successfully.
-2024-05-07 13:14:00.857314	Database connection successfully.
-2024-05-07 13:14:00.925011	Database connection successfully.
-2024-05-07 13:15:06.236276	Database connection successfully.
-2024-05-07 13:15:06.597430	ajay User logout successfully.
-2024-05-07 13:15:06.599134	ajay Some changes in Database.
-2024-05-07 13:15:06.655201	Database connection successfully.
+2024-05-08 06:47:03.701514	Database connection successfully.
+2024-05-08 06:47:04.073010	ajay User login successfully.
+2024-05-08 06:47:04.074746	ajay Some changes in Database.
+2024-05-08 06:47:04.092935	Database connection successfully.
+2024-05-08 06:48:11.064041	Database connection successfully.
+2024-05-08 06:48:11.071296	ajay Post created: (pre_save function)
+2024-05-08 06:48:11.077755	ajay Post created: (post_save function)
+2024-05-08 06:48:16.235012	ajay Custom Signal form Post view's : Post saved
+2024-05-08 06:48:18.246278	Database connection successfully.
+2024-05-08 06:56:36.277711	Database connection successfully.
+2024-05-08 07:19:41.639418	Database connection successfully.
+2024-05-08 07:22:17.485094	Database connection successfully.
+2024-05-08 07:22:33.711033	Database connection successfully.
+2024-05-08 07:24:25.310895	Database connection successfully.
+2024-05-08 07:24:31.211583	Database connection successfully.
+2024-05-08 07:24:55.308096	Database connection successfully.
+2024-05-08 07:25:55.030699	Database connection successfully.
+2024-05-08 07:26:24.760631	Database connection successfully.
+2024-05-08 07:28:37.189539	Database connection successfully.
+2024-05-08 07:28:59.937405	Database connection successfully.
+2024-05-08 07:30:43.843588	Database connection successfully.
+2024-05-08 07:43:03.547518	Database connection successfully.
+2024-05-08 07:43:40.828182	Database connection successfully.
+2024-05-08 07:55:12.700691	Database connection successfully.
+2024-05-08 07:56:23.906845	Database connection successfully.
+2024-05-08 07:56:54.393758	Database connection successfully.
+2024-05-08 07:57:01.383514	Database connection successfully.
+2024-05-08 07:57:07.658248	Database connection successfully.
+2024-05-08 07:57:12.428916	Database connection successfully.
+2024-05-08 07:58:31.741937	Database connection successfully.
+2024-05-08 08:02:43.537738	Database connection successfully.
+2024-05-08 08:02:43.602104	Database connection successfully.
+2024-05-08 08:02:52.101565	Database connection successfully.
+2024-05-08 08:02:55.645031	Database connection successfully.
+2024-05-08 08:03:08.518465	Database connection successfully.
+2024-05-08 08:03:19.547422	admin User created successfully
+2024-05-08 08:03:27.254100	Database connection successfully.
+2024-05-08 08:03:30.962068	Database connection successfully.
+2024-05-08 08:03:31.485037	admin User login successfully.
+2024-05-08 08:03:31.536752	admin Some changes in Database.
+2024-05-08 08:03:31.558560	Database connection successfully.
+2024-05-08 08:03:34.229374	Database connection successfully.
+2024-05-08 08:03:34.327351	Database connection successfully.
+2024-05-08 08:03:56.120123	Database connection successfully.
+2024-05-08 08:04:04.825149	Database connection successfully.
+2024-05-08 08:04:15.534666	Database connection successfully.
+2024-05-08 08:04:29.471550	Database connection successfully.
+2024-05-08 08:04:32.772650	Database connection successfully.
+2024-05-08 08:04:42.543797	Database connection successfully.
+2024-05-08 08:04:45.701656	Database connection successfully.
+2024-05-08 08:04:57.365653	Database connection successfully.
+2024-05-08 08:04:59.250802	Database connection successfully.
+2024-05-08 08:04:59.363983	Database connection successfully.
+2024-05-08 08:11:00.366035	Database connection successfully.
+2024-05-08 08:16:39.220576	Database connection successfully.
+2024-05-08 08:19:19.046238	Database connection successfully.
+2024-05-08 08:19:19.415139	staff_user User created successfully
+2024-05-08 08:19:19.417186	staff_user Some changes in Database.
+2024-05-08 08:20:37.557273	Database connection successfully.
+2024-05-08 08:21:07.836917	Database connection successfully.
+2024-05-08 08:21:07.956766	Database connection successfully.
+2024-05-08 08:21:09.559247	Database connection successfully.
+2024-05-08 08:21:10.219241	Database connection successfully.
+2024-05-08 08:21:16.158650	Database connection successfully.
+2024-05-08 08:21:20.153524	Database connection successfully.
+2024-05-08 08:21:20.257173	Database connection successfully.
+2024-05-08 08:21:23.306942	Database connection successfully.
+2024-05-08 08:21:40.197797	Database connection successfully.
+2024-05-08 08:21:40.257399	Database connection successfully.
+2024-05-08 08:23:14.841162	Database connection successfully.
+2024-05-08 08:23:30.766321	Database connection successfully.
+2024-05-08 08:23:32.574171	Database connection successfully.
+2024-05-08 08:23:38.960712	Database connection successfully.
+2024-05-08 08:24:05.549651	Database connection successfully.
+2024-05-08 08:24:05.618184	Database connection successfully.
+2024-05-08 08:24:08.682120	Database connection successfully.
+2024-05-08 08:24:08.806305	Database connection successfully.
+2024-05-08 08:24:20.619300	Database connection successfully.
+2024-05-08 08:24:22.412199	Database connection successfully.
+2024-05-08 08:24:24.027908	Database connection successfully.
+2024-05-08 08:24:24.154902	Database connection successfully.
+2024-05-08 08:24:36.475656	Database connection successfully.
+2024-05-08 08:24:36.542296	Database connection successfully.
+2024-05-08 08:24:36.731478	Database connection successfully.
+2024-05-08 08:24:36.882686	Database connection successfully.
+2024-05-08 08:24:37.131856	Database connection successfully.
+2024-05-08 08:24:37.184860	Database connection successfully.
+2024-05-08 08:24:37.634936	Database connection successfully.
+2024-05-08 08:24:37.685140	Database connection successfully.
+2024-05-08 08:28:53.685753	Database connection successfully.
+2024-05-08 08:28:54.044152	staf_vijay User created successfully
+2024-05-08 08:28:54.046262	staf_vijay Some changes in Database.
+2024-05-08 08:29:02.760300	Database connection successfully.
+2024-05-08 08:29:02.803449	Database connection successfully.
+2024-05-08 08:30:42.041787	Database connection successfully.
+2024-05-08 08:30:43.121832	staf_vij User created successfully
+2024-05-08 08:30:43.125200	staf_vij Some changes in Database.
+2024-05-08 08:30:47.698932	Database connection successfully.
+2024-05-08 08:30:47.749267	Database connection successfully.
+2024-05-08 09:48:32.921941	Database connection successfully.
+2024-05-08 09:48:32.975609	Database connection successfully.
+2024-05-08 09:50:04.418522	Database connection successfully.
+2024-05-08 09:50:04.547507	Database connection successfully.
+2024-05-08 09:50:12.682826	Database connection successfully.
+2024-05-08 09:50:33.645098	Database connection successfully.
+2024-05-08 09:50:38.062040	Database connection successfully.
+2024-05-08 09:50:38.107751	Database connection successfully.
+2024-05-08 09:51:49.114555	Database connection successfully.
+2024-05-08 09:51:49.237136	Database connection successfully.
+2024-05-08 09:51:52.918499	Database connection successfully.
+2024-05-08 09:51:53.493601	Database connection successfully.
