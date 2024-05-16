@@ -172,11 +172,77 @@
                 <textarea name="comment" id="comment{{ post.id }}" cols="85" rows="10"></textarea>
                 <button type="button" onclick="submitComment('{{ post.id }}')">Submit (ajax)</button>
             </form>
-            <!-- --------------------------  -->
         </div>
     </div>
     {% endfor %}
     {% endif %}
+
+<!-- paggination style 1 
+    <div>
+        <span>
+          {% if user_post.has_previous %}
+            <a href="?page={{ user_post.previous_page_number }}">Previous</a>
+          {% endif %}
+          <span>
+            Page {{ user_post.number }} of {{ user_post.paginator.num_pages }}.
+          </span>
+          {% if user_post.has_next %}
+            <a href="?page={{ user_post.next_page_number }}">Next</a>
+          {% endif %}
+        </span>
+      </div>
+-->
+
+<!-- paggination style 2  
+{% if user_post.has_previous %}
+ <a href="?page={{ user_post.previous_page_number }}">Previous</a>
+{% else %}
+  <a>Previous</a>
+{% endif %}
+
+{% for i in user_post.paginator.page_range %}
+    <a href="?page={{ i }}">{{ i }}</a>
+{% endfor %}
+
+{% if user_post.has_next %}
+  <a href="?page={{ user_post.next_page_number }}">Next</a>
+{% else %}
+  <a>Next</a>
+{% endif %}
+-->
+
+<!-- paggination style 3 -->
+{% if user_post.has_previous %}
+  <a href="?page={{ user_post.previous_page_number }}">« Previous page</a>
+
+  {% if user_post.number > 3 %}
+    <a href="?page=1">1</a>
+    {% if user_post.number > 4 %}
+      <span>...</span>
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+{% for num in user_post.paginator.page_range %}
+  {% if user_post.number == num %}
+    <a href="?page={{ num }}">{{ num }}</a>
+  {% elif num > user_post.number|add:'-3' and num < user_post.number|add:'3' %}
+    <a href="?page={{ num }}">{{ num }}</a>
+  {% endif %}
+{% endfor %}
+
+{% if user_post.has_next %}
+  {% if user_post.number < user_post.paginator.num_pages|add:'-3' %}
+    <span>...</span>
+    <a href="?page={{ user_post.paginator.num_pages }}">{{ user_post.paginator.num_pages }}</a>
+  {% elif page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
+    <a href="?page={{ user_post.paginator.num_pages }}">{{ user_post.paginator.num_pages }}</a>
+  {% endif %}
+
+  <a href="?page={{ user_post.next_page_number }}">Next Page »</a>
+{% endif %}
+
+
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -271,8 +337,8 @@
         //like function
         function submitLike(post_id) {
             $.ajax({
-                url: '/post/post/like/' + post_id + '/',
                 type: 'GET',
+                url: '/post/post/like/' + post_id + '/',
                 data: {
                     
                 },

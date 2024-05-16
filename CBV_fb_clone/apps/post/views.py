@@ -4,6 +4,7 @@ from django.views import generic
 from .forms import UserPostForm, UserCommentForm
 from .models import *
 from django.conf import settings
+# from django.views.decorators.cache import cache_page
 #--------------------------------------------------------------------------
 import requests, os
 from django.core.mail import send_mail, EmailMultiAlternatives
@@ -67,7 +68,6 @@ hello_signal = Signal()
 @receiver(hello_signal)
 def my_signal(sender,instance, **kwargs):
     message = kwargs.get("message")
-    import pdb;pdb.set_trace()
     current_time = datetime.datetime.now()
     with open("logdata.txt", "a") as file:
         file.write(str(current_time) + "\t" + instance.user.username + " " + message + "\n")
@@ -75,7 +75,6 @@ def my_signal(sender,instance, **kwargs):
 
 # hello_signal.send(sender=None,instance=UserPost.objects.all().first(), message="Custom Signal form Post view's : Hello, u r logged in")
 #---------------------------------------------------------
-
 
 class PostFormView(generic.FormView):
     form_class = UserPostForm
@@ -127,6 +126,7 @@ class delete_post(generic.DeleteView):
     success_url = '/post/view_post/'
     template_name = 'post/conf_delete.html'
     
+
 #--------------------------------------------------------------------------
 class all_user_post(generic.ListView):
     model = UserPost
@@ -159,8 +159,25 @@ class view_post(generic.ListView):
         for post in user_post:
             post.is_liked = Like.objects.filter(user=self.request.user,post=post).exists()
 
-        context['user_post']=user_post
-        context['comment']=all_cmt
+    # paggination
+    # https://testdriven.io/blog/django-pagination/
+        from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+        page_num = self.request.GET.get('page', 1)
+        paginator = Paginator(user_post, 1) # 6 employees per page
+
+        try:
+            page_obj = paginator.page(page_num)
+        except PageNotAnInteger:
+            # if page is not an integer, deliver the first page
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            # if the page is out of range, deliver the last page
+            page_obj = paginator.page(paginator.num_pages)
+
+
+        context['user_post'] = page_obj
+        context['comment'] = all_cmt
 
         return context
 
@@ -220,6 +237,7 @@ class delete_comment(generic.View):
 
 class like(generic.View):
     def get(self,request,pk):
+        print('user liked')
         user = request.user
         post = get_object_or_404(UserPost,id=pk)
         #checking post is liked or not by cur user
