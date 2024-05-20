@@ -11,4 +11,4 @@ class CustomMiddleware:
             file.write(str(current_time) + '\t' + "user : " + str(request.user) + "path : "+ str(request.path) +"\n")
         response = self.get_response(request)
         # Code to be executed after the view is called
-        return response
+        return response  
