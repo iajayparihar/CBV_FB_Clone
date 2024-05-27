@@ -5,8 +5,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.views import generic
 from django.contrib.auth import views
 from django.conf import settings
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 
 #------Custom single-----------------
 from django.dispatch import Signal, receiver
@@ -22,12 +20,8 @@ def my_signal(sender,instance, **kwargs):
 hello_signal.send(sender=None,instance=CustomUser.objects.all().first() ,message="Custom Signal form view's : Hello, u r logged in")
 #---------------------------------------------------------
 
-=======
+
 from django.contrib.auth.mixins import LoginRequiredMixin
->>>>>>> Stashed changes
-=======
-from django.contrib.auth.mixins import LoginRequiredMixin
->>>>>>> Stashed changes
 class register(generic.CreateView):
     form_class = CustomUserForm
     template_name = 'registration/register.html'

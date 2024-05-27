@@ -211,8 +211,6 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 # Celery settings
 CELERY_BROKER_URL = "redis://127.0.0.1:6379"
 CELERY_RESULT_BACKEND = "redis://localhost:6379"
@@ -220,9 +218,6 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SEIALIZER = 'json'
 CELERY_TIMEZONE = "Asia/Kolkata"
-=======
-=======
->>>>>>> Stashed changes
 
 # import sentry_sdk
 
@@ -267,9 +262,5 @@ CELERY_TIMEZONE = "Asia/Kolkata"
 #             'level': os.getenv('DJANGO_LOG_LEVEL', 'ERROR')
 #         },
 #     },
-<<<<<<< Updated upstream
+
 # }
->>>>>>> Stashed changes
-=======
-# }
->>>>>>> Stashed changes

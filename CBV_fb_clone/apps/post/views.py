@@ -6,14 +6,7 @@ from .models import *
 from django.conf import settings
 #--------------------------------------------------------------------------
 import requests, os
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
 from django.contrib.auth.mixins import LoginRequiredMixin
->>>>>>> Stashed changes
-=======
-from django.contrib.auth.mixins import LoginRequiredMixin
->>>>>>> Stashed changes
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -64,8 +57,6 @@ def send_email(subject, from_email, to_email, reply_to, attachments=None, contex
     # else:
     #     print("Invalid recipient email address.")
 
-<<<<<<< Updated upstream
-
 
 #------Custom single-----------------
 from django.dispatch import Signal, receiver
@@ -86,16 +77,8 @@ def my_signal(sender,instance, **kwargs):
 #---------------------------------------------------------
 
 
-<<<<<<< Updated upstream
-class PostFormView(generic.FormView):
-=======
 ##########################################################################
 class PostFormView(LoginRequiredMixin,generic.FormView):
->>>>>>> Stashed changes
-=======
-##########################################################################
-class PostFormView(LoginRequiredMixin,generic.FormView):
->>>>>>> Stashed changes
     form_class = UserPostForm
     template_name = 'post/post.html'
     success_url = '/post/view_post/'
