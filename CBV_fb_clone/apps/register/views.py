@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect
 from .forms import *
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.views import generic
 from django.contrib.auth import views
 from django.conf import settings
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 #------Custom single-----------------
 from django.dispatch import Signal, receiver
@@ -21,12 +22,18 @@ def my_signal(sender,instance, **kwargs):
 hello_signal.send(sender=None,instance=CustomUser.objects.all().first() ,message="Custom Signal form view's : Hello, u r logged in")
 #---------------------------------------------------------
 
+=======
+from django.contrib.auth.mixins import LoginRequiredMixin
+>>>>>>> Stashed changes
+=======
+from django.contrib.auth.mixins import LoginRequiredMixin
+>>>>>>> Stashed changes
 class register(generic.CreateView):
     form_class = CustomUserForm
     template_name = 'registration/register.html'
     success_url = '/accounts/login/'
 
-class profile(generic.TemplateView):
+class profile(LoginRequiredMixin,generic.TemplateView):
     template_name='post/dashboard.html'
     
 
@@ -58,7 +65,7 @@ class profile(generic.TemplateView):
 #         return render(request,'registration/login.html',{'form':fm,'message':'try again!!!'})
     
 
-# class user_logout(generic.View):
-#     def get(self,request):
-#         logout(request)
-#         return redirect('/')
+class user_logout(generic.View):
+    def get(self,request):
+        logout(request)
+        return redirect('/accounts/login/')

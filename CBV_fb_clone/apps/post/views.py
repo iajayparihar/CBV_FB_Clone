@@ -6,6 +6,14 @@ from .models import *
 from django.conf import settings
 #--------------------------------------------------------------------------
 import requests, os
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+from django.contrib.auth.mixins import LoginRequiredMixin
+>>>>>>> Stashed changes
+=======
+from django.contrib.auth.mixins import LoginRequiredMixin
+>>>>>>> Stashed changes
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -56,6 +64,7 @@ def send_email(subject, from_email, to_email, reply_to, attachments=None, contex
     # else:
     #     print("Invalid recipient email address.")
 
+<<<<<<< Updated upstream
 
 
 #------Custom single-----------------
@@ -77,7 +86,16 @@ def my_signal(sender,instance, **kwargs):
 #---------------------------------------------------------
 
 
+<<<<<<< Updated upstream
 class PostFormView(generic.FormView):
+=======
+##########################################################################
+class PostFormView(LoginRequiredMixin,generic.FormView):
+>>>>>>> Stashed changes
+=======
+##########################################################################
+class PostFormView(LoginRequiredMixin,generic.FormView):
+>>>>>>> Stashed changes
     form_class = UserPostForm
     template_name = 'post/post.html'
     success_url = '/post/view_post/'
@@ -115,20 +133,20 @@ class PostFormView(generic.FormView):
     
 
 #-------------------------------------------------------------------------------------
-class update_post(generic.UpdateView):
+class update_post(LoginRequiredMixin,generic.UpdateView):
     model = UserPost
     form_class = UserPostForm
     template_name = 'post/post.html'
     success_url = '/post/view_post/'
     
 #--------------------------------------------------------------------------
-class delete_post(generic.DeleteView):
+class delete_post(LoginRequiredMixin,generic.DeleteView):
     model = UserPost
     success_url = '/post/view_post/'
     template_name = 'post/conf_delete.html'
     
 #--------------------------------------------------------------------------
-class all_user_post(generic.ListView):
+class all_user_post(LoginRequiredMixin,generic.ListView):
     model = UserPost
     template_name = 'post/all_user_post.html'
     
@@ -147,7 +165,7 @@ class all_user_post(generic.ListView):
         return context
         
 #--------------------------------------------------------------------------
-class view_post(generic.ListView):
+class view_post(LoginRequiredMixin,generic.ListView):
     model = UserPost
     template_name = 'post/profile.html'
     
@@ -165,7 +183,7 @@ class view_post(generic.ListView):
         return context
 
 #--------------------------------------------------------------------------
-class post_detail(generic.DetailView):
+class post_detail(LoginRequiredMixin,generic.DetailView):
     model = UserPost
     template_name = 'post/post_detail.html'
 
@@ -183,7 +201,7 @@ class post_detail(generic.DetailView):
     
 #--------------------------------------------------------------------------
 
-class comment_on_post(generic.FormView):
+class comment_on_post(LoginRequiredMixin,generic.FormView):
     form_class = UserCommentForm    
     def form_valid(self,form):
         return super().form_valid(form)
@@ -197,7 +215,7 @@ class comment_on_post(generic.FormView):
         new_comment.save()
         return JsonResponse({'success': True})
         
-class update_on_comment(generic.View):
+class update_on_comment(LoginRequiredMixin,generic.View):
     def post(self,request):
         comment_text = self.request.POST.get('comment')
         if not comment_text:
@@ -211,14 +229,14 @@ class update_on_comment(generic.View):
         return JsonResponse({'success': True})
         
 
-class delete_comment(generic.View):
+class delete_comment(LoginRequiredMixin,generic.View):
     def get(self,request):
         cmt_id = self.request.GET.get('cmt_id')
         UserComments.objects.get(id=cmt_id).delete()
         return JsonResponse({'success': True})
     
 
-class like(generic.View):
+class like(LoginRequiredMixin,generic.View):
     def get(self,request,pk):
         user = request.user
         post = get_object_or_404(UserPost,id=pk)

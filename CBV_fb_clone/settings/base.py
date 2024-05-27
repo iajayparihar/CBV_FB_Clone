@@ -147,7 +147,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-LOGOUT_REDIRECT_URL = "/accounts/login/"
+
 
 # sending mail config
 
@@ -211,6 +211,8 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 # Celery settings
 CELERY_BROKER_URL = "redis://127.0.0.1:6379"
 CELERY_RESULT_BACKEND = "redis://localhost:6379"
@@ -218,3 +220,56 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SEIALIZER = 'json'
 CELERY_TIMEZONE = "Asia/Kolkata"
+=======
+=======
+>>>>>>> Stashed changes
+
+# import sentry_sdk
+
+# sentry_sdk.init(
+#     dsn="https://6afe83eab306810c72528793a2504cae@o4507152280715264.ingest.us.sentry.io/4507152283402240",
+#     # Set traces_sample_rate to 1.0 to capture 100%
+#     # of transactions for performance monitoring.
+#     traces_sample_rate=1.0,
+#     # Set profiles_sample_rate to 1.0 to profile 100%
+#     # of sampled transactions.
+#     # We recommend adjusting this value in production.
+#     profiles_sample_rate=1.0,
+# )
+
+
+# import logging 
+
+# # DataFlair #Logging Information
+# LOGGING = {
+#     'version': 1,
+#     # Version of logging
+#     'disable_existing_loggers': False,
+#     #disable logging 
+#     # Handlers #############################################################
+#     'handlers': {
+#         'file': {
+#             'level': 'ERROR',
+#             'class': 'logging.FileHandler',
+#             'filename': 'Log-debug.log',
+#         },
+# ########################################################################
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     # Loggers ####################################################################
+#     'loggers': {
+#         'django': {
+#             'handlers': ['file', 'console'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#             'level': os.getenv('DJANGO_LOG_LEVEL', 'ERROR')
+#         },
+#     },
+<<<<<<< Updated upstream
+# }
+>>>>>>> Stashed changes
+=======
+# }
+>>>>>>> Stashed changes
