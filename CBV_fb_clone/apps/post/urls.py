@@ -1,8 +1,10 @@
 
 from django.urls import path
 from .views import *
+
 app_name = "Post"
 urlpatterns = [
+
     path('post/', PostFormView.as_view(), name= 'post'),
     path('all_user_post/', all_user_post.as_view(), name= 'all_user_post'),
     path('view_post/', view_post.as_view(), name= 'view_post'),

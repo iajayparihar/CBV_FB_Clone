@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'register',
     'post',
     'django_nose',
+    'rest_framework_swagger',
+    "drf_yasg",
 ]
 
 DATABASES = {
@@ -67,7 +69,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'post.middleware.CustomMiddleware',
+
 ]
+# add middleware cache
+MIDDLEWARE += [
+    "django.middleware.cache.UpdateCacheMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
+]
+
 
 ROOT_URLCONF = 'CBV_fb_clone.urls'
 
@@ -120,7 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 

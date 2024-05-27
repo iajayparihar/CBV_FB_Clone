@@ -7,13 +7,15 @@ router.register('',UserModelViewSet,basename='register')
     # path('register/', RegisterListCreateAPIView.as_view()),
     # path('register/<int:pk>/', RegisterRetrieveUpdateDestroyAPIView.as_view()),
 
+# in swagger we have doc of this api's
+# swagger 
+# http://127.0.0.1:8000/post/docs/?format=openapi
 urlpatterns = [
     path('register/',include(router.urls)),
     
     path('login/', LoginApiView.as_view()),
     path('logout/', LogoutApiView.as_view()),
     path('profile/', ProfileApiView.as_view()),
-    
     
     path('passChange/', PasswordChangeApiView.as_view()),
     path('post/', PostCreateAPIView.as_view(), name= 'post'),

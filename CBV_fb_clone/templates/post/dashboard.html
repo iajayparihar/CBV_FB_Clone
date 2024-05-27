@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load cache %}
 
 {% block title %}
   Dashboard
@@ -24,7 +25,13 @@
 {% block body %}
   <div class="container">
     <div class="center-text">
+      
+      {% cache 15 userKaName request.user.username %}
+      <h1>{{request.user.first_name}}{{request.user.last_name}}</h1>
+      
+      {% endcache userKaName %} 
       <h1 class="display-4">Dashboard {{ request.user.first_name|capfirst }} {{ request.user.last_name|capfirst }}</h1>
+      
       <div class="mt-4">
         <a class="btn btn-primary btn-lg" href="{% url 'Post:post' %}">Create Post</a>
       </div>
