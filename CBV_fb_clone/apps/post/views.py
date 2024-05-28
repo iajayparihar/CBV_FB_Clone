@@ -76,13 +76,9 @@ def my_signal(sender,instance, **kwargs):
 # hello_signal.send(sender=None,instance=UserPost.objects.all().first(), message="Custom Signal form Post view's : Hello, u r logged in")
 #---------------------------------------------------------
 
-<<<<<<< HEAD
 
 ##########################################################################
 class PostFormView(LoginRequiredMixin,generic.FormView):
-=======
-class PostFormView(generic.FormView):
->>>>>>> first
     form_class = UserPostForm
     template_name = 'post/post.html'
     success_url = '/post/view_post/'
